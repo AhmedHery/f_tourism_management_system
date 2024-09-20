@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    
+    <h2>Manage Employees</h2>
+
+    <!-- Form to Search for Clients by National ID -->
+    <h3>Search Clients</h3>
+    <form action="{{ url_for('admin_dashboard') }}" method="post">
+        <input type="hidden" name="action" value="search_client">
+        <label for="search_national_id">National ID:</label>
+        <input type="text" id="search_national_id" name="search_national_id" required>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if clients %}
+        <h3>Search Results</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>National ID</th>
+                    <th>Passport Number</th>
+                    <th>Profession</th>
+                    <th>Phone Number</th>
+                    <th>Application Date</th>
+                    <th>Total Amount</th>
+                    <th>Down Payment</th>
+                    <th>Remaining Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                    <tr>
+                        <td>{{ client.name }}</td>
+                        <td>{{ client.national_id }}</td>
+                        <td>{{ client.passport_number }}</td>
+                        <td>{{ client.profession }}</td>
+                        <td>{{ client.phone_number }}</td>
+                        <td>{{ client.application_date }}</td>
+                        <td>{{ client.total_amount }}</td>
+                        <td>{{ client.down_payment }}</td>
+                        <td>{{ client.remaining_amount }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <!-- Form to Add New Employee -->
+    <h3>Add New Employee</h3>
+    <form action="{{ url_for('admin_dashboard') }}" method="post">
+        <input type="hidden" name="action" value="add_employee">
+        <label for="emp_name">Name:</label>
+        <input type="text" id="emp_name" name="emp_name" required>
+        
+        <label for="emp_username">Username:</label>
+        <input type="text" id="emp_username" name="emp_username" required>
+        
+        <label for="emp_password">Password:</label>
+        <input type="password" id="emp_password" name="emp_password" required>
+        
+        <label for="emp_role">Role:</label>
+        <select id="emp_role" name="emp_role" required>
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
+        </select>
+        
+        <button type="submit">Add Employee</button>
+    </form>
+
+    <!-- Form to Update Existing Employee -->
+    <h3>Update Employee</h3>
+    <form action="{{ url_for('admin_dashboard') }}" method="post">
+        <input type="hidden" name="action" value="update_employee">
+        <label for="update_emp_id">Select Employee:</label>
+        <select id="update_emp_id" name="emp_id" required>
+            {% for employee in employees %}
+                <option value="{{ employee.id }}">{{ employee.name }} ({{ employee.username }})</option>
+            {% endfor %}
+        </select>
+        
+        <label for="update_emp_name">New Name:</label>
+        <input type="text" id="update_emp_name" name="new_emp_name">
+        
+        <label for="update_emp_username">New Username:</label>
+        <input type="text" id="update_emp_username" name="new_emp_username">
+        
+        <label for="update_emp_role">New Role:</label>
+        <select id="update_emp_role" name="new_emp_role">
+            <option value="employee">Employee</option>
+            <option value="manager">Manager</option>
+        </select>
+        
+        <button type="submit">Update Employee</button>
+    </form>
+
+    <!-- Form to Delete Employee -->
+    <h3>Delete Employee</h3>
+    <form action="{{ url_for('admin_dashboard') }}" method="post">
+        <input type="hidden" name="action" value="delete_employee">
+        <label for="delete_emp_id">Select Employee:</label>
+        <select id="delete_emp_id" name="emp_id" required>
+            {% for employee in employees %}
+                <option value="{{ employee.id }}">{{ employee.name }} ({{ employee.username }})</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Delete Employee</button>
+    </form>
+
+
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>
